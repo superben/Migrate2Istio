@@ -1,0 +1,74 @@
+
+server:
+  port: 8085
+
+spring:
+  application:
+    name: roger-service-vote
+  datasource:
+    name: test
+    url: jdbc:mysql://10.60.2.101/yofc_mobile_cb_sit?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT&useSSL=true
+    username: root
+    password: root
+    # 使用druid数据源
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    filters: stat
+    maxActive: 30
+    initialSize: 5
+    maxWait: 60000
+    minIdle: 1
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: select 'x'
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    poolPreparedStatements: true
+    maxOpenPreparedStatements: 20
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: 6379
+    password: redis123456
+    database: 3
+    lettuce:
+      pool:
+        max-active: 100
+        max-wait: 2000
+        max-idle: 500
+        min-idle: 8
+    timeout:  10000
+
+## 该配置节点为独立的节点，有很多同学容易将这个配置放在spring的节点下，导致配置无法被识别
+mybatis:
+  mapper-locations: classpath:mapping/vote/*.xml  #注意：一定要对应mapper映射xml文件的所在路径
+  type-aliases-package: com.yofc.dal.vote.entity  # 注意：对应实体类的路径
+
+logging:
+  level:
+    com.yofc.dal.mapper: info
+
+web:
+  pageSize: 10
+  dropPageSize: 10
+  errorPage:
+    PAGE404: "index"
+    PAGE500: "500"
+    PAGE40X: "40x"
+
+cbJms:
+  enable: false
+  messageTopic: cbMessageTopic_sit
+
+cbServer:
+  weburl: 10.70.18.111:12000
+  wexin:
+    message:
+      debug: false
+      remoteUrl: http://www.yofcqywx.top:9094/tongshiba/push_message.php?userid=2806&title={title}&description={description}&url={url}
+      remoteUrl4Dept: http://www.yofcqywx.top:9094/tongshiba/push_dept_message.php?deptid=2806&title={title}&description={description}&url={url}
+      readTimeout: 5000
+      connectTimeout: 5000
+
+feign:
+  subjectServiceUrl: ${SUBJECT_SERVICE_URL:localhost:8084}

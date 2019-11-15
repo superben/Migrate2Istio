@@ -1,0 +1,41 @@
+
+server:
+  port: 8083
+
+spring:
+  application:
+    name: roger-service-admin
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER:http://localhost:8888}
+
+#  cloud:
+#    config:
+#      server:
+#        git:
+#          uri: ssh://10.70.18.111:52222/huiwei/roger-cloud-config-sample/{application}
+#          username: "haitao"
+#          password: "Qweqwe#24"
+
+#是否需要权限拉去，默认是true,如果不false就不允许你去拉取配置中心Server更新的内容
+management:
+  security:
+    enabled: false
+
+#ribbon:
+#  eureka:
+#    enabled: true
+#
+#feign:
+#  hystrix:
+#    enabled: true
+#
+#roger:
+#  swagger:
+#    header:
+#      basePackage: com.yofc.admin
+#      title: mobile cloud servcie
+#      description: mobile cloud servcie roger-service-admin
+#      termsOfServiceUrl: ""
+#      author: Roger
+#      version: 1.0

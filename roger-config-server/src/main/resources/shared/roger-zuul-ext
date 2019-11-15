@@ -1,0 +1,20 @@
+zuul:
+  routes:
+    api-a:
+      path: /service-a/**
+      serviceId: roger-service-client-01
+    api-b:
+      path: /service-b/**
+      serviceId: roger-service-client-02
+    zuul:
+      path: /zuul/**
+      serviceId: roger-config-server
+    api-admin:
+      path: /service-admin/**
+      serviceId: roger-service-admin
+    api-subject:
+      path: /service-subject/**
+      serviceId: roger-service-subject
+    api-vote:
+      path: /service-vote/**
+      serviceId: roger-service-vote  

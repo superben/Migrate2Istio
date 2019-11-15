@@ -1,0 +1,12 @@
+version: "0.1.0"
+pre_ci_boot:
+  image: 10.70.22.30:30500/public/mvn_npm
+  tag: "v1"
+ci:
+- mvn clean install
+- cd roger-service-vote
+- mkdir -p $ALAUDACI_DEST_DIR/roger-service-vote
+- mkdir -p $ALAUDACI_UPLOAD_DIR/roger-service-vote
+- cp target/roger-service-vote-1.0.jar $ALAUDACI_DEST_DIR/roger-service-vote
+- cp Dockerfile $ALAUDACI_DEST_DIR/roger-service-vote/
+- cp target/roger-service-vote-1.0.jar $ALAUDACI_UPLOAD_DIR/roger-service-vote/
