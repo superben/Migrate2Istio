@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectReadLogMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.SubjectReadLog">
+    <id column="read_id" jdbcType="INTEGER" property="readId" />
+    <result column="user_id" jdbcType="INTEGER" property="userId" />
+    <result column="user_name" jdbcType="VARCHAR" property="userName" />
+    <result column="object_id" jdbcType="INTEGER" property="objectId" />
+    <result column="enter_date" jdbcType="TIMESTAMP" property="enterDate" />
+    <result column="out_date" jdbcType="TIMESTAMP" property="outDate" />
+    <result column="body" jdbcType="VARCHAR" property="body" />
+    <result column="key_col" jdbcType="INTEGER" property="keyCol" />
+    <result column="ext_str1" jdbcType="VARCHAR" property="extStr1" />
+    <result column="ext_str2" jdbcType="VARCHAR" property="extStr2" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    read_id, user_id, user_name, object_id, enter_date, out_date, body, key_col, ext_str1, 
+    ext_str2
+  </sql>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectReadLogExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_subject_read_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cb_subject_read_log
+    where read_id = #{readId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_subject_read_log
+    where read_id = #{readId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectReadLogExample">
+    delete from cb_subject_read_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.SubjectReadLog">
+    insert into cb_subject_read_log (read_id, user_id, user_name, 
+      object_id, enter_date, out_date, 
+      body, key_col, ext_str1, 
+      ext_str2)
+    values (#{readId,jdbcType=INTEGER}, #{userId,jdbcType=INTEGER}, #{userName,jdbcType=VARCHAR}, 
+      #{objectId,jdbcType=INTEGER}, #{enterDate,jdbcType=TIMESTAMP}, #{outDate,jdbcType=TIMESTAMP}, 
+      #{body,jdbcType=VARCHAR}, #{keyCol,jdbcType=INTEGER}, #{extStr1,jdbcType=VARCHAR}, 
+      #{extStr2,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.SubjectReadLog">
+    insert into cb_subject_read_log
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="readId != null">
+        read_id,
+      </if>
+      <if test="userId != null">
+        user_id,
+      </if>
+      <if test="userName != null">
+        user_name,
+      </if>
+      <if test="objectId != null">
+        object_id,
+      </if>
+      <if test="enterDate != null">
+        enter_date,
+      </if>
+      <if test="outDate != null">
+        out_date,
+      </if>
+      <if test="body != null">
+        body,
+      </if>
+      <if test="keyCol != null">
+        key_col,
+      </if>
+      <if test="extStr1 != null">
+        ext_str1,
+      </if>
+      <if test="extStr2 != null">
+        ext_str2,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="readId != null">
+        #{readId,jdbcType=INTEGER},
+      </if>
+      <if test="userId != null">
+        #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null">
+        #{objectId,jdbcType=INTEGER},
+      </if>
+      <if test="enterDate != null">
+        #{enterDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outDate != null">
+        #{outDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="body != null">
+        #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="keyCol != null">
+        #{keyCol,jdbcType=INTEGER},
+      </if>
+      <if test="extStr1 != null">
+        #{extStr1,jdbcType=VARCHAR},
+      </if>
+      <if test="extStr2 != null">
+        #{extStr2,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectReadLogExample" resultType="java.lang.Long">
+    select count(*) from cb_subject_read_log
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_subject_read_log
+    <set>
+      <if test="record.readId != null">
+        read_id = #{record.readId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userId != null">
+        user_id = #{record.userId,jdbcType=INTEGER},
+      </if>
+      <if test="record.userName != null">
+        user_name = #{record.userName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.objectId != null">
+        object_id = #{record.objectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.enterDate != null">
+        enter_date = #{record.enterDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.outDate != null">
+        out_date = #{record.outDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.body != null">
+        body = #{record.body,jdbcType=VARCHAR},
+      </if>
+      <if test="record.keyCol != null">
+        key_col = #{record.keyCol,jdbcType=INTEGER},
+      </if>
+      <if test="record.extStr1 != null">
+        ext_str1 = #{record.extStr1,jdbcType=VARCHAR},
+      </if>
+      <if test="record.extStr2 != null">
+        ext_str2 = #{record.extStr2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_subject_read_log
+    set read_id = #{record.readId,jdbcType=INTEGER},
+      user_id = #{record.userId,jdbcType=INTEGER},
+      user_name = #{record.userName,jdbcType=VARCHAR},
+      object_id = #{record.objectId,jdbcType=INTEGER},
+      enter_date = #{record.enterDate,jdbcType=TIMESTAMP},
+      out_date = #{record.outDate,jdbcType=TIMESTAMP},
+      body = #{record.body,jdbcType=VARCHAR},
+      key_col = #{record.keyCol,jdbcType=INTEGER},
+      ext_str1 = #{record.extStr1,jdbcType=VARCHAR},
+      ext_str2 = #{record.extStr2,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.SubjectReadLog">
+    update cb_subject_read_log
+    <set>
+      <if test="userId != null">
+        user_id = #{userId,jdbcType=INTEGER},
+      </if>
+      <if test="userName != null">
+        user_name = #{userName,jdbcType=VARCHAR},
+      </if>
+      <if test="objectId != null">
+        object_id = #{objectId,jdbcType=INTEGER},
+      </if>
+      <if test="enterDate != null">
+        enter_date = #{enterDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="outDate != null">
+        out_date = #{outDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="body != null">
+        body = #{body,jdbcType=VARCHAR},
+      </if>
+      <if test="keyCol != null">
+        key_col = #{keyCol,jdbcType=INTEGER},
+      </if>
+      <if test="extStr1 != null">
+        ext_str1 = #{extStr1,jdbcType=VARCHAR},
+      </if>
+      <if test="extStr2 != null">
+        ext_str2 = #{extStr2,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where read_id = #{readId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.SubjectReadLog">
+    update cb_subject_read_log
+    set user_id = #{userId,jdbcType=INTEGER},
+      user_name = #{userName,jdbcType=VARCHAR},
+      object_id = #{objectId,jdbcType=INTEGER},
+      enter_date = #{enterDate,jdbcType=TIMESTAMP},
+      out_date = #{outDate,jdbcType=TIMESTAMP},
+      body = #{body,jdbcType=VARCHAR},
+      key_col = #{keyCol,jdbcType=INTEGER},
+      ext_str1 = #{extStr1,jdbcType=VARCHAR},
+      ext_str2 = #{extStr2,jdbcType=VARCHAR}
+    where read_id = #{readId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectReadLogMapperExt" >
+    <select id="summary" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        log.object_id objectId,
+        count(log.read_id) AS readAmount
+        FROM
+        cb_subject_read_log log
+        WHERE
+        1 = 1
+        <if test="subjectId != null">
+            and log.object_id = #{subjectId}
+        </if>
+        GROUP BY
+        log.object_id
+    </select>
+    <insert id="insertSelectiveExt" keyProperty="readId" useGeneratedKeys="true" keyColumn="read_id"  parameterType="com.yofc.dal.subject.entity.SubjectReadLog">
+        insert into cb_subject_read_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null">
+                user_name,
+            </if>
+            <if test="objectId != null">
+                object_id,
+            </if>
+            <if test="enterDate != null">
+                enter_date,
+            </if>
+            <if test="outDate != null">
+                out_date,
+            </if>
+            <if test="body != null">
+                body,
+            </if>
+            <if test="keyCol != null">
+                key_col,
+            </if>
+            <if test="extStr1 != null">
+                ext_str1,
+            </if>
+            <if test="extStr2 != null">
+                ext_str2,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId,jdbcType=INTEGER},
+            </if>
+            <if test="userName != null">
+                #{userName,jdbcType=VARCHAR},
+            </if>
+            <if test="objectId != null">
+                #{objectId,jdbcType=INTEGER},
+            </if>
+            <if test="enterDate != null">
+                #{enterDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="outDate != null">
+                #{outDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="body != null">
+                #{body,jdbcType=VARCHAR},
+            </if>
+            <if test="keyCol != null">
+                #{keyCol,jdbcType=INTEGER},
+            </if>
+            <if test="extStr1 != null">
+                #{extStr1,jdbcType=VARCHAR},
+            </if>
+            <if test="extStr2!= null">
+                #{extStr2,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

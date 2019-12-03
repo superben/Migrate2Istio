@@ -1,0 +1,333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectCollectionMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.SubjectCollection">
+    <id column="collection_id" jdbcType="INTEGER" property="collectionId" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="collection_flag" jdbcType="INTEGER" property="collectionFlag" />
+    <result column="good_point" jdbcType="INTEGER" property="goodPoint" />
+    <result column="collection_user_id" jdbcType="VARCHAR" property="collectionUserId" />
+    <result column="collection_user_name" jdbcType="VARCHAR" property="collectionUserName" />
+    <result column="good_point_user_id" jdbcType="VARCHAR" property="goodPointUserId" />
+    <result column="good_point_user_name" jdbcType="VARCHAR" property="goodPointUserName" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    collection_id, subject_id, collection_flag, good_point, collection_user_id, collection_user_name, 
+    good_point_user_id, good_point_user_name, create_user, create_date, update_user, 
+    update_date
+  </sql>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectCollectionExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_subject_collection
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cb_subject_collection
+    where collection_id = #{collectionId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_subject_collection
+    where collection_id = #{collectionId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectCollectionExample">
+    delete from cb_subject_collection
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.SubjectCollection">
+    insert into cb_subject_collection (collection_id, subject_id, collection_flag, 
+      good_point, collection_user_id, collection_user_name, 
+      good_point_user_id, good_point_user_name, create_user, 
+      create_date, update_user, update_date
+      )
+    values (#{collectionId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER}, #{collectionFlag,jdbcType=INTEGER}, 
+      #{goodPoint,jdbcType=INTEGER}, #{collectionUserId,jdbcType=VARCHAR}, #{collectionUserName,jdbcType=VARCHAR}, 
+      #{goodPointUserId,jdbcType=VARCHAR}, #{goodPointUserName,jdbcType=VARCHAR}, #{createUser,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.SubjectCollection">
+    insert into cb_subject_collection
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="collectionId != null">
+        collection_id,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="collectionFlag != null">
+        collection_flag,
+      </if>
+      <if test="goodPoint != null">
+        good_point,
+      </if>
+      <if test="collectionUserId != null">
+        collection_user_id,
+      </if>
+      <if test="collectionUserName != null">
+        collection_user_name,
+      </if>
+      <if test="goodPointUserId != null">
+        good_point_user_id,
+      </if>
+      <if test="goodPointUserName != null">
+        good_point_user_name,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="collectionId != null">
+        #{collectionId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="collectionFlag != null">
+        #{collectionFlag,jdbcType=INTEGER},
+      </if>
+      <if test="goodPoint != null">
+        #{goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="collectionUserId != null">
+        #{collectionUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionUserName != null">
+        #{collectionUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodPointUserId != null">
+        #{goodPointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodPointUserName != null">
+        #{goodPointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectCollectionExample" resultType="java.lang.Long">
+    select count(*) from cb_subject_collection
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_subject_collection
+    <set>
+      <if test="record.collectionId != null">
+        collection_id = #{record.collectionId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.collectionFlag != null">
+        collection_flag = #{record.collectionFlag,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodPoint != null">
+        good_point = #{record.goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.collectionUserId != null">
+        collection_user_id = #{record.collectionUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.collectionUserName != null">
+        collection_user_name = #{record.collectionUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodPointUserId != null">
+        good_point_user_id = #{record.goodPointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.goodPointUserName != null">
+        good_point_user_name = #{record.goodPointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null">
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_subject_collection
+    set collection_id = #{record.collectionId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      collection_flag = #{record.collectionFlag,jdbcType=INTEGER},
+      good_point = #{record.goodPoint,jdbcType=INTEGER},
+      collection_user_id = #{record.collectionUserId,jdbcType=VARCHAR},
+      collection_user_name = #{record.collectionUserName,jdbcType=VARCHAR},
+      good_point_user_id = #{record.goodPointUserId,jdbcType=VARCHAR},
+      good_point_user_name = #{record.goodPointUserName,jdbcType=VARCHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.SubjectCollection">
+    update cb_subject_collection
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="collectionFlag != null">
+        collection_flag = #{collectionFlag,jdbcType=INTEGER},
+      </if>
+      <if test="goodPoint != null">
+        good_point = #{goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="collectionUserId != null">
+        collection_user_id = #{collectionUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="collectionUserName != null">
+        collection_user_name = #{collectionUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodPointUserId != null">
+        good_point_user_id = #{goodPointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="goodPointUserName != null">
+        good_point_user_name = #{goodPointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where collection_id = #{collectionId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.SubjectCollection">
+    update cb_subject_collection
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      collection_flag = #{collectionFlag,jdbcType=INTEGER},
+      good_point = #{goodPoint,jdbcType=INTEGER},
+      collection_user_id = #{collectionUserId,jdbcType=VARCHAR},
+      collection_user_name = #{collectionUserName,jdbcType=VARCHAR},
+      good_point_user_id = #{goodPointUserId,jdbcType=VARCHAR},
+      good_point_user_name = #{goodPointUserName,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where collection_id = #{collectionId,jdbcType=INTEGER}
+  </update>
+</mapper>

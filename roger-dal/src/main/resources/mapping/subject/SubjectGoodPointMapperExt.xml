@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectGoodPointMapperExt">
+    <insert id="insertSelectiveExt" keyProperty="goodPointId" useGeneratedKeys="true" parameterType="com.yofc.dal.subject.entity.SubjectGoodPoint">
+        insert into cb_good_point
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                subject_id,
+            </if>
+            <if test="followId != null">
+                follow_id,
+            </if>
+            <if test="replyId != null">
+                reply_id,
+            </if>
+            <if test="goodPoint != null">
+                good_point,
+            </if>
+            <if test="pointType != null">
+                point_type,
+            </if>
+            <if test="pointUserId != null">
+                point_user_id,
+            </if>
+            <if test="pointUserName != null">
+                point_user_name,
+            </if>
+            <if test="pointDate != null">
+                point_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="followId != null">
+                #{followId,jdbcType=INTEGER},
+            </if>
+            <if test="replyId != null">
+                #{replyId,jdbcType=INTEGER},
+            </if>
+            <if test="goodPoint != null">
+                #{goodPoint,jdbcType=INTEGER},
+            </if>
+            <if test="pointType != null">
+                #{pointType,jdbcType=VARCHAR},
+            </if>
+            <if test="pointUserId != null">
+                #{pointUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="pointUserName != null">
+                #{pointUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="pointDate != null">
+                #{pointDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="summary" resultType="java.util.Map">
+        select follow_id as objectId,point_type as pointType,sum(good_point) as amount from cb_good_point where point_type = 'follow' group by follow_id
+        union
+        select reply_id as objectId,point_type as pointType,sum(good_point) as amount from cb_good_point where point_type = 'reply' group by reply_id
+    </select>
+</mapper>

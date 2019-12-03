@@ -10,7 +10,6 @@
 .project
 /*.project
 logs/
-/**/*.xml
 /**/*.iml
 *.pid
 /**/.DS_Store

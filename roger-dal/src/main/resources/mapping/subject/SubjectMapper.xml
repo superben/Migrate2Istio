@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.Subject">
+    <id column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="subject_classify_code" jdbcType="VARCHAR" property="subjectClassifyCode" />
+    <result column="subject" jdbcType="VARCHAR" property="subject" />
+    <result column="owner_id" jdbcType="VARCHAR" property="ownerId" />
+    <result column="owner_name" jdbcType="VARCHAR" property="ownerName" />
+    <result column="top_stick" jdbcType="VARCHAR" property="topStick" />
+    <result column="remove_flag" jdbcType="CHAR" property="removeFlag" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+    <result column="link_label" jdbcType="VARCHAR" property="linkLabel" />
+    <result column="link_url" jdbcType="VARCHAR" property="linkUrl" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yofc.dal.subject.entity.Subject">
+    <result column="subject_text" jdbcType="LONGVARCHAR" property="subjectText" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    subject_id, subject_classify_code, subject, owner_id, owner_name, top_stick, remove_flag, 
+    create_user, create_date, update_user, update_date, link_label, link_url
+  </sql>
+  <sql id="Blob_Column_List">
+    subject_text
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yofc.dal.subject.entity.SubjectExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_subject
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_subject
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_subject
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_subject
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectExample">
+    delete from cb_subject
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.Subject">
+    insert into cb_subject (subject_id, subject_classify_code, subject, 
+      owner_id, owner_name, top_stick, 
+      remove_flag, create_user, create_date, 
+      update_user, update_date, link_label, 
+      link_url, subject_text)
+    values (#{subjectId,jdbcType=INTEGER}, #{subjectClassifyCode,jdbcType=VARCHAR}, #{subject,jdbcType=VARCHAR}, 
+      #{ownerId,jdbcType=VARCHAR}, #{ownerName,jdbcType=VARCHAR}, #{topStick,jdbcType=VARCHAR}, 
+      #{removeFlag,jdbcType=CHAR}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{linkLabel,jdbcType=VARCHAR}, 
+      #{linkUrl,jdbcType=VARCHAR}, #{subjectText,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.Subject">
+    insert into cb_subject
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="subjectClassifyCode != null">
+        subject_classify_code,
+      </if>
+      <if test="subject != null">
+        subject,
+      </if>
+      <if test="ownerId != null">
+        owner_id,
+      </if>
+      <if test="ownerName != null">
+        owner_name,
+      </if>
+      <if test="topStick != null">
+        top_stick,
+      </if>
+      <if test="removeFlag != null">
+        remove_flag,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="linkLabel != null">
+        link_label,
+      </if>
+      <if test="linkUrl != null">
+        link_url,
+      </if>
+      <if test="subjectText != null">
+        subject_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectClassifyCode != null">
+        #{subjectClassifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null">
+        #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="topStick != null">
+        #{topStick,jdbcType=VARCHAR},
+      </if>
+      <if test="removeFlag != null">
+        #{removeFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="linkLabel != null">
+        #{linkLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null">
+        #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectText != null">
+        #{subjectText,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectExample" resultType="java.lang.Long">
+    select count(*) from cb_subject
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_subject
+    <set>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subjectClassifyCode != null">
+        subject_classify_code = #{record.subjectClassifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subject != null">
+        subject = #{record.subject,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerId != null">
+        owner_id = #{record.ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.ownerName != null">
+        owner_name = #{record.ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topStick != null">
+        top_stick = #{record.topStick,jdbcType=VARCHAR},
+      </if>
+      <if test="record.removeFlag != null">
+        remove_flag = #{record.removeFlag,jdbcType=CHAR},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null">
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.linkLabel != null">
+        link_label = #{record.linkLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="record.linkUrl != null">
+        link_url = #{record.linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subjectText != null">
+        subject_text = #{record.subjectText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update cb_subject
+    set subject_id = #{record.subjectId,jdbcType=INTEGER},
+      subject_classify_code = #{record.subjectClassifyCode,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      owner_id = #{record.ownerId,jdbcType=VARCHAR},
+      owner_name = #{record.ownerName,jdbcType=VARCHAR},
+      top_stick = #{record.topStick,jdbcType=VARCHAR},
+      remove_flag = #{record.removeFlag,jdbcType=CHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      link_label = #{record.linkLabel,jdbcType=VARCHAR},
+      link_url = #{record.linkUrl,jdbcType=VARCHAR},
+      subject_text = #{record.subjectText,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_subject
+    set subject_id = #{record.subjectId,jdbcType=INTEGER},
+      subject_classify_code = #{record.subjectClassifyCode,jdbcType=VARCHAR},
+      subject = #{record.subject,jdbcType=VARCHAR},
+      owner_id = #{record.ownerId,jdbcType=VARCHAR},
+      owner_name = #{record.ownerName,jdbcType=VARCHAR},
+      top_stick = #{record.topStick,jdbcType=VARCHAR},
+      remove_flag = #{record.removeFlag,jdbcType=CHAR},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      link_label = #{record.linkLabel,jdbcType=VARCHAR},
+      link_url = #{record.linkUrl,jdbcType=VARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.Subject">
+    update cb_subject
+    <set>
+      <if test="subjectClassifyCode != null">
+        subject_classify_code = #{subjectClassifyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="subject != null">
+        subject = #{subject,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerId != null">
+        owner_id = #{ownerId,jdbcType=VARCHAR},
+      </if>
+      <if test="ownerName != null">
+        owner_name = #{ownerName,jdbcType=VARCHAR},
+      </if>
+      <if test="topStick != null">
+        top_stick = #{topStick,jdbcType=VARCHAR},
+      </if>
+      <if test="removeFlag != null">
+        remove_flag = #{removeFlag,jdbcType=CHAR},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="linkLabel != null">
+        link_label = #{linkLabel,jdbcType=VARCHAR},
+      </if>
+      <if test="linkUrl != null">
+        link_url = #{linkUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="subjectText != null">
+        subject_text = #{subjectText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yofc.dal.subject.entity.Subject">
+    update cb_subject
+    set subject_classify_code = #{subjectClassifyCode,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      top_stick = #{topStick,jdbcType=VARCHAR},
+      remove_flag = #{removeFlag,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      link_label = #{linkLabel,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR},
+      subject_text = #{subjectText,jdbcType=LONGVARCHAR}
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.Subject">
+    update cb_subject
+    set subject_classify_code = #{subjectClassifyCode,jdbcType=VARCHAR},
+      subject = #{subject,jdbcType=VARCHAR},
+      owner_id = #{ownerId,jdbcType=VARCHAR},
+      owner_name = #{ownerName,jdbcType=VARCHAR},
+      top_stick = #{topStick,jdbcType=VARCHAR},
+      remove_flag = #{removeFlag,jdbcType=CHAR},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      link_label = #{linkLabel,jdbcType=VARCHAR},
+      link_url = #{linkUrl,jdbcType=VARCHAR}
+    where subject_id = #{subjectId,jdbcType=INTEGER}
+  </update>
+</mapper>

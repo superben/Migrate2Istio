@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectParagraphMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.SubjectParagraph">
+    <id column="paragraph_id" jdbcType="INTEGER" property="paragraphId" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="img_src" jdbcType="VARCHAR" property="imgSrc" />
+    <result column="main_tag" jdbcType="INTEGER" property="mainTag" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yofc.dal.subject.entity.SubjectParagraph">
+    <result column="paragraph" jdbcType="LONGVARCHAR" property="paragraph" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    paragraph_id, subject_id, img_src, main_tag
+  </sql>
+  <sql id="Blob_Column_List">
+    paragraph
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yofc.dal.subject.entity.SubjectParagraphExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_subject_paragraph
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectParagraphExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_subject_paragraph
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_subject_paragraph
+    where paragraph_id = #{paragraphId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_subject_paragraph
+    where paragraph_id = #{paragraphId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectParagraphExample">
+    delete from cb_subject_paragraph
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.SubjectParagraph">
+    insert into cb_subject_paragraph (paragraph_id, subject_id, img_src, 
+      main_tag, paragraph)
+    values (#{paragraphId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER}, #{imgSrc,jdbcType=VARCHAR}, 
+      #{mainTag,jdbcType=INTEGER}, #{paragraph,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.SubjectParagraph">
+    insert into cb_subject_paragraph
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="paragraphId != null">
+        paragraph_id,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="imgSrc != null">
+        img_src,
+      </if>
+      <if test="mainTag != null">
+        main_tag,
+      </if>
+      <if test="paragraph != null">
+        paragraph,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="paragraphId != null">
+        #{paragraphId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="imgSrc != null">
+        #{imgSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="mainTag != null">
+        #{mainTag,jdbcType=INTEGER},
+      </if>
+      <if test="paragraph != null">
+        #{paragraph,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectParagraphExample" resultType="java.lang.Long">
+    select count(*) from cb_subject_paragraph
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_subject_paragraph
+    <set>
+      <if test="record.paragraphId != null">
+        paragraph_id = #{record.paragraphId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.imgSrc != null">
+        img_src = #{record.imgSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mainTag != null">
+        main_tag = #{record.mainTag,jdbcType=INTEGER},
+      </if>
+      <if test="record.paragraph != null">
+        paragraph = #{record.paragraph,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update cb_subject_paragraph
+    set paragraph_id = #{record.paragraphId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      img_src = #{record.imgSrc,jdbcType=VARCHAR},
+      main_tag = #{record.mainTag,jdbcType=INTEGER},
+      paragraph = #{record.paragraph,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_subject_paragraph
+    set paragraph_id = #{record.paragraphId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      img_src = #{record.imgSrc,jdbcType=VARCHAR},
+      main_tag = #{record.mainTag,jdbcType=INTEGER}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.SubjectParagraph">
+    update cb_subject_paragraph
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="imgSrc != null">
+        img_src = #{imgSrc,jdbcType=VARCHAR},
+      </if>
+      <if test="mainTag != null">
+        main_tag = #{mainTag,jdbcType=INTEGER},
+      </if>
+      <if test="paragraph != null">
+        paragraph = #{paragraph,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where paragraph_id = #{paragraphId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yofc.dal.subject.entity.SubjectParagraph">
+    update cb_subject_paragraph
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      img_src = #{imgSrc,jdbcType=VARCHAR},
+      main_tag = #{mainTag,jdbcType=INTEGER},
+      paragraph = #{paragraph,jdbcType=LONGVARCHAR}
+    where paragraph_id = #{paragraphId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.SubjectParagraph">
+    update cb_subject_paragraph
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      img_src = #{imgSrc,jdbcType=VARCHAR},
+      main_tag = #{mainTag,jdbcType=INTEGER}
+    where paragraph_id = #{paragraphId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectFollowMapperExt">
+    <select id="queryDetailId" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        cf.follow_id followId,
+        cf.subject_id subjectId,
+        cf.follow_text followText,
+        cf.follow_user_id followUserId,
+        cf.follow_user_name followUserName,
+        wu.photo as avatar,
+        cf.img_src as imgSrc,
+        follow_parent_id followParentId,
+        follow_parent_user_id followParentUserId,
+        follow_parent_user_name followParentUserName,
+        cf.create_user createUser,
+        cf.create_date createDate,
+        cf.update_user updateUser,
+        cf.update_date updateDate,
+        (select sum(cgp.good_point) from cb_good_point cgp where cgp.follow_id = cf.follow_id and point_type='follow') as goodPointCount,
+        (select count(1) from cb_follow_reply cfr where cfr.subject_id = cf.subject_id and cfr.follow_id = cf.follow_id) as followCount,
+        cgp1.good_point as goodPoint
+          from cb_follow cf left join cb_good_point cgp1
+          on (cf.follow_id = cgp1.follow_id and cgp1.point_user_id = #{userId} and cgp1.point_type = 'follow')
+          left join sys_user wu on wu.user_id = cf.follow_user_id
+        where 1 = 1
+            <if test="subjectId != null">
+                and cf.subject_id = #{subjectId,jdbcType=INTEGER}
+            </if>
+            <if test="followParentId != null">
+                and cf.follow_parent_id = #{followParentId,jdbcType=INTEGER}
+            </if>
+        order by cf.create_date desc
+    </select>
+
+    <select id="queryByParam" parameterType="java.util.Map"  resultType="java.util.Map">
+        select
+        cf.follow_id followId,
+        cf.subject_id subjectId,
+        cf.follow_text followText,
+        cf.follow_user_id followUserId,
+        cf.follow_user_name followUserName,
+        cf.img_src as imgSrc,
+        follow_parent_id followParentId,
+        follow_parent_user_id followParentUserId,
+        follow_parent_user_name followParentUserName,
+        cf.create_user createUser,
+        cf.create_date createDate,
+        cf.update_user updateUser,
+        cf.update_date updateDate,
+        cgp1.good_point as goodPoint,
+        wu.photo as avatar,
+        (select sum(cgp.good_point) from cb_good_point cgp where cgp.follow_id = cf.follow_id and point_type='follow') as goodPointCount,
+        (select count(1) from cb_follow_reply cfr where cfr.follow_id = cf.follow_id) as followCount,
+        (select max(cfr.update_date) from cb_follow_reply cfr where cfr.follow_id = cf.follow_id) as lastFollowDate
+        from cb_follow cf left join cb_good_point cgp1
+          on (cf.follow_id = cgp1.follow_id and cgp1.point_user_id = #{userId} and cgp1.point_type = 'follow')
+          left join sys_user wu on wu.user_id = cf.follow_user_id
+        where 1 = 1
+            and cf.follow_id = #{followId,jdbcType=INTEGER}
+    </select>
+
+    <insert id="insertSelectiveExt" keyProperty="followId" useGeneratedKeys="true" keyColumn="follow_id" parameterType="com.yofc.dal.subject.entity.SubjectFollow">
+        insert into cb_follow
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                subject_id,
+            </if>
+            <if test="followText != null">
+                follow_text,
+            </if>
+            <if test="followUserId != null">
+                follow_user_id,
+            </if>
+            <if test="followUserName != null">
+                follow_user_name,
+            </if>
+            <if test="imgSrc != null">
+                img_src,
+            </if>
+            <if test="followParentId != null">
+                follow_parent_id,
+            </if>
+            <if test="followParentUserId != null">
+                follow_parent_user_id,
+            </if>
+            <if test="followParentUserName != null">
+                follow_parent_user_name,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="followText != null">
+                #{followText,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="followUserId != null">
+                #{followUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="followUserName != null">
+                #{followUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="imgSrc != null">
+                #{imgSrc,jdbcType=VARCHAR},
+            </if>
+            <if test="followParentId != null">
+                #{followParentId,jdbcType=INTEGER},
+            </if>
+            <if test="followParentUserId != null">
+                #{followParentUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="followParentUserName != null">
+                #{followParentUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

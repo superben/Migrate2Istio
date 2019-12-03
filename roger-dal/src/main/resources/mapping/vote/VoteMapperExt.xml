@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.vote.mapper.VoteMapperExt" >
+    <select id="findAll" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            vote.vote_id AS voteId,
+            vote.vote_title AS voteTitle,
+            vote.vote_desc AS voteDesc,
+            vote.start_date AS startDate,
+            vote.end_date AS endDate,
+            vote.public_state AS publicState,
+            vote.`status`,
+            vote.reminder_state AS reminderState,
+            vote.originator_id AS originatorId,
+            vote.Originator_name AS originatorName,
+            vote.remove_flag AS removeFlag
+        FROM
+            vote
+        where
+            remove_flag != 'Y'
+            order by vote_id desc
+    </select>
+    <insert id="insertSelectiveExt" keyProperty="voteId" useGeneratedKeys="true" keyColumn="vote_id" parameterType="com.yofc.dal.vote.entity.Vote">
+        insert into vote
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="voteTitle != null">
+                vote_title,
+            </if>
+            <if test="voteDesc != null">
+                vote_desc,
+            </if>
+            <if test="startDate != null">
+                start_date,
+            </if>
+            <if test="endDate != null">
+                end_date,
+            </if>
+            <if test="publicState != null">
+                public_state,
+            </if>
+            <if test="status != null">
+                status,
+            </if>
+            <if test="reminderState != null">
+                reminder_state,
+            </if>
+            <if test="originatorId != null">
+                originator_id,
+            </if>
+            <if test="originatorName != null">
+                Originator_name,
+            </if>
+            <if test="removeFlag != null">
+                remove_flag,
+            </if>
+            <if test="imgSrc != null">
+                img_src,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="voteTitle != null">
+                #{voteTitle,jdbcType=VARCHAR},
+            </if>
+            <if test="voteDesc != null">
+                #{voteDesc,jdbcType=VARCHAR},
+            </if>
+            <if test="startDate != null">
+                #{startDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="endDate != null">
+                #{endDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="publicState != null">
+                #{publicState,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                #{status,jdbcType=VARCHAR},
+            </if>
+            <if test="reminderState != null">
+                #{reminderState,jdbcType=VARCHAR},
+            </if>
+            <if test="originatorId != null">
+                #{originatorId,jdbcType=VARCHAR},
+            </if>
+            <if test="originatorName != null">
+                #{originatorName,jdbcType=VARCHAR},
+            </if>
+            <if test="removeFlag != null">
+                #{removeFlag,jdbcType=CHAR},
+            </if>
+            <if test="imgSrc != null">
+                #{imgSrc,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

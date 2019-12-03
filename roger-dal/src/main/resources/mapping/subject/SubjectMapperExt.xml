@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectMapperExt">
+    <select id="queryListByParam" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        cs.subject_id subjectId,
+        cs.subject_classify_code subjectClassifyCode,
+        csc1.subject_classify_name subjectClassifyName,
+        cs.subject,
+        cs.subject_text subjectText,
+        cs.owner_id ownerId,
+        cs.owner_name ownerName,
+        cs.top_stick topStick,
+        cs.create_user createUser,
+        cs.create_date createDate,
+        cs.update_user updateUser,
+        cs.update_date updateDate,
+        cgp1.good_point as goodPoint,
+        csp.paragraph_id as paragraphId,
+        csp.paragraph as paragraph,
+        csp.img_src as imgSrc,
+        csp.main_tag as mainTag,
+        (select sum(cgp.good_point) from cb_good_point cgp where cgp.subject_id = cs.subject_id and
+        cgp.point_type='subject') as goodPointCount,
+        (select count(1) from cb_follow cf where cf.subject_id = cs.subject_id) as followCount,
+        (select max(cf.update_date) from cb_follow cf where cf.subject_id = cs.subject_id) as lastFollowDate
+        from cb_subject cs
+            left join cb_good_point cgp1 on (cs.subject_id = cgp1.subject_id and cgp1.point_type = 'subject' and
+            cgp1.point_user_id = #{userId})
+            left join cb_subject_paragraph csp on (csp.subject_id = cs.subject_id and csp.main_tag = 1)
+            left join cb_subject_classify csc1 on cs.subject_classify_code = csc1.subject_classify_code
+        where 1=1 and cs.remove_flag != 'Y'
+        and exists (
+        select 1 from cb_classify_group_map ccgm,
+        (select concat(sd.ancestors, ',', sd.dept_id) as ancestors from sys_user su inner join sys_dept sd on su.dept_id = sd.dept_id and su.user_id = #{userId}) usd
+        where
+        ccgm.subject_classify_code = cs.subject_classify_code
+        and    locate(ccgm.ancestors, usd.ancestors) > 0
+        )
+        <if test="collectionFlag == 1">
+            and exists (select 1 from cb_subject_collection csc where cs.subject_id=csc.subject_id and
+            csc.collection_user_id=#{userId} and csc.collection_flag = 1)
+        </if>
+        <if test="goodPointType!=null and goodPointType!=''">
+            and exists (select 1 from cb_good_point cgp2
+            where cs.subject_id = cgp2.subject_id
+            AND cgp2.point_type = #{goodPointType}
+            AND cgp2.good_point = 1)
+        </if>
+        <if test="keywords != null and keywords != ''">
+            and (cs.subject like concat ('%',#{keywords,jdbcType=VARCHAR},'%') or cs.owner_name like concat
+            ('%',#{keywords,jdbcType=VARCHAR},'%'))
+        </if>
+        <if test="subjectClassifyCode != null">
+            and cs.subject_classify_code = #{subjectClassifyCode,jdbcType=VARCHAR}
+        </if>
+        <if test="ownerId != null and ownerId !=''">
+            and cs.owner_id = #{ownerId}
+        </if>
+        <if test="topStick !=null and topStick != '' and topStickArea != 'ALL'">
+            and cs.top_stick = #{topStick}
+        </if>
+        <choose>
+            <when test="startRow != null and startRow > 0">
+                and cs.subject_id &gt; #{startRow}
+                order by cs.subject_id
+            </when>
+            <when test="endRow != null and endRow > 0">
+                and cs.subject_id &lt; #{endRow}
+                order by cs.subject_id desc
+            </when>
+            <when test="topStick !=null and topStick != ''">
+                order by cs.create_date desc
+            </when>
+            <otherwise>
+                order by cs.subject_id desc
+            </otherwise>
+        </choose>
+        <if test="pageSize != null">
+            limit #{pageSize}
+        </if>
+    </select>
+
+    <select id="queryByParam" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+        cs.subject_id subjectId,
+        cs.subject_classify_code subjectClassifyCode,
+        cs.subject,
+        cs.subject_text subjectText,
+        cs.owner_id ownerId,
+        cs.top_stick,
+        cs.owner_name ownerName,
+        cs.create_user createUser,
+        cs.create_date createDate,
+        cs.update_user updateUser,
+        cs.update_date updateDate,
+        cgp1.good_point as goodPoint,
+        csc.collection_flag as collectionFlag,
+        csc1.subject_classify_name as subjectClassifyName,
+        (select sum(cgp.good_point) from cb_good_point cgp where cgp.subject_id = cs.subject_id and cgp.point_type='subject') as goodPointCount,
+        (select count(1) from cb_follow cf where cf.subject_id = cs.subject_id) as followCount,
+        (select max(cf.update_date) from cb_follow cf where cf.subject_id = cs.subject_id) as lastFollowDate
+        from cb_subject cs left join cb_good_point cgp1
+          on (cs.subject_id = cgp1.subject_id and cgp1.point_type = 'subject' and cgp1.point_user_id = #{userId})
+          left join cb_subject_collection csc on (cs.subject_id = csc.subject_id and csc.collection_user_id = #{userId})
+          left join cb_subject_classify csc1 on csc1.subject_classify_code = cs.subject_classify_code
+        where 1 = 1 and cs.remove_flag != 'Y'
+            and cs.subject_id = #{subjectId,jdbcType=INTEGER}
+    </select>
+
+    <select id="queryMyAttention" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+        count(distinct(cs.subject_id)) as publishCount,
+        (select count(1) from cb_subject_collection csc where csc.collection_user_id = #{userId} and csc.collection_flag=1) as collectionCount,
+        count(cgp.good_point) goodPointCount
+        from cb_subject cs
+        left join cb_good_point cgp on (cgp.subject_id = cs.subject_id
+        and cgp.point_type = 'subject'
+        and cgp.good_point=1)
+        where cs.remove_flag != 'Y'
+        and cs.owner_id = #{userId}
+    </select>
+
+    <insert id="insertExt" keyProperty="subject_id" useGeneratedKeys="true"
+            parameterType="com.yofc.dal.subject.entity.Subject">
+    insert into cb_subject (subject, subject_text
+      )
+        values (#{subject,jdbcType=VARCHAR}, #{subjectText,jdbcType=VARCHAR}
+      )
+    </insert>
+
+    <insert id="insertSelectiveExt" keyProperty="subjectId" useGeneratedKeys="true" keyColumn="subject_id"
+            parameterType="com.yofc.dal.subject.entity.Subject">
+        insert into cb_subject
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectClassifyCode != null">
+                subject_classify_code,
+            </if>
+            <if test="subject != null">
+                subject,
+            </if>
+            <if test="subjectText != null">
+                subject_text,
+            </if>
+            <if test="ownerId != null">
+                owner_id,
+            </if>
+            <if test="ownerName != null">
+                owner_name,
+            </if>
+            <if test="topStick != null">
+                top_stick,
+            </if>
+            <if test="removeFlag != null">
+                remove_flag,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="linkLabel != null">
+                link_label,
+            </if>
+            <if test="linkUrl != null">
+                link_url,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectClassifyCode != null">
+                #{subjectClassifyCode,jdbcType=VARCHAR},
+            </if>
+            <if test="subject != null">
+                #{subject,jdbcType=VARCHAR},
+            </if>
+            <if test="subjectText != null">
+                #{subjectText,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="ownerId != null">
+                #{ownerId,jdbcType=VARCHAR},
+            </if>
+            <if test="ownerName != null">
+                #{ownerName,jdbcType=VARCHAR},
+            </if>
+            <if test="topStick != null">
+                #{topStick,jdbcType=VARCHAR},
+            </if>
+            <if test="removeFlag != null">
+                #{removeFlag,jdbcType=CHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="linkLabel != null">
+                #{linkLabel,jdbcType=VARCHAR},
+            </if>
+            <if test="linkUrl != null">
+                #{linkUrl,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

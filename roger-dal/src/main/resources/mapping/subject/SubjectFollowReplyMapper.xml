@@ -1,0 +1,387 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectFollowReplyMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.SubjectFollowReply">
+    <id column="reply_id" jdbcType="INTEGER" property="replyId" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="follow_id" jdbcType="INTEGER" property="followId" />
+    <result column="image_follow_id" jdbcType="INTEGER" property="imageFollowId" />
+    <result column="reply_user_id" jdbcType="VARCHAR" property="replyUserId" />
+    <result column="reply_user_name" jdbcType="VARCHAR" property="replyUserName" />
+    <result column="reply_date" jdbcType="TIMESTAMP" property="replyDate" />
+    <result column="create_user" jdbcType="VARCHAR" property="createUser" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_user" jdbcType="VARCHAR" property="updateUser" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <resultMap extends="BaseResultMap" id="ResultMapWithBLOBs" type="com.yofc.dal.subject.entity.SubjectFollowReply">
+    <result column="reply_text" jdbcType="LONGVARCHAR" property="replyText" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    reply_id, subject_id, follow_id, image_follow_id, reply_user_id, reply_user_name, 
+    reply_date, create_user, create_date, update_user, update_date
+  </sql>
+  <sql id="Blob_Column_List">
+    reply_text
+  </sql>
+  <select id="selectByExampleWithBLOBs" parameterType="com.yofc.dal.subject.entity.SubjectFollowReplyExample" resultMap="ResultMapWithBLOBs">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_follow_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectFollowReplyExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_follow_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from cb_follow_reply
+    where reply_id = #{replyId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_follow_reply
+    where reply_id = #{replyId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectFollowReplyExample">
+    delete from cb_follow_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+    insert into cb_follow_reply (reply_id, subject_id, follow_id, 
+      image_follow_id, reply_user_id, reply_user_name, 
+      reply_date, create_user, create_date, 
+      update_user, update_date, reply_text
+      )
+    values (#{replyId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER}, #{followId,jdbcType=INTEGER}, 
+      #{imageFollowId,jdbcType=INTEGER}, #{replyUserId,jdbcType=VARCHAR}, #{replyUserName,jdbcType=VARCHAR}, 
+      #{replyDate,jdbcType=TIMESTAMP}, #{createUser,jdbcType=VARCHAR}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=VARCHAR}, #{updateDate,jdbcType=TIMESTAMP}, #{replyText,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+    insert into cb_follow_reply
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        reply_id,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="followId != null">
+        follow_id,
+      </if>
+      <if test="imageFollowId != null">
+        image_follow_id,
+      </if>
+      <if test="replyUserId != null">
+        reply_user_id,
+      </if>
+      <if test="replyUserName != null">
+        reply_user_name,
+      </if>
+      <if test="replyDate != null">
+        reply_date,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+      <if test="replyText != null">
+        reply_text,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="replyId != null">
+        #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="followId != null">
+        #{followId,jdbcType=INTEGER},
+      </if>
+      <if test="imageFollowId != null">
+        #{imageFollowId,jdbcType=INTEGER},
+      </if>
+      <if test="replyUserId != null">
+        #{replyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUserName != null">
+        #{replyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null">
+        #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyText != null">
+        #{replyText,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectFollowReplyExample" resultType="java.lang.Long">
+    select count(*) from cb_follow_reply
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_follow_reply
+    <set>
+      <if test="record.replyId != null">
+        reply_id = #{record.replyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.followId != null">
+        follow_id = #{record.followId,jdbcType=INTEGER},
+      </if>
+      <if test="record.imageFollowId != null">
+        image_follow_id = #{record.imageFollowId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyUserId != null">
+        reply_user_id = #{record.replyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyUserName != null">
+        reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.replyDate != null">
+        reply_date = #{record.replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.createUser != null">
+        create_user = #{record.createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createDate != null">
+        create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updateUser != null">
+        update_user = #{record.updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="record.updateDate != null">
+        update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.replyText != null">
+        reply_text = #{record.replyText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map">
+    update cb_follow_reply
+    set reply_id = #{record.replyId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      follow_id = #{record.followId,jdbcType=INTEGER},
+      image_follow_id = #{record.imageFollowId,jdbcType=INTEGER},
+      reply_user_id = #{record.replyUserId,jdbcType=VARCHAR},
+      reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+      reply_date = #{record.replyDate,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP},
+      reply_text = #{record.replyText,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_follow_reply
+    set reply_id = #{record.replyId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      follow_id = #{record.followId,jdbcType=INTEGER},
+      image_follow_id = #{record.imageFollowId,jdbcType=INTEGER},
+      reply_user_id = #{record.replyUserId,jdbcType=VARCHAR},
+      reply_user_name = #{record.replyUserName,jdbcType=VARCHAR},
+      reply_date = #{record.replyDate,jdbcType=TIMESTAMP},
+      create_user = #{record.createUser,jdbcType=VARCHAR},
+      create_date = #{record.createDate,jdbcType=TIMESTAMP},
+      update_user = #{record.updateUser,jdbcType=VARCHAR},
+      update_date = #{record.updateDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+    update cb_follow_reply
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="followId != null">
+        follow_id = #{followId,jdbcType=INTEGER},
+      </if>
+      <if test="imageFollowId != null">
+        image_follow_id = #{imageFollowId,jdbcType=INTEGER},
+      </if>
+      <if test="replyUserId != null">
+        reply_user_id = #{replyUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="replyUserName != null">
+        reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="replyDate != null">
+        reply_date = #{replyDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser,jdbcType=VARCHAR},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="replyText != null">
+        reply_text = #{replyText,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where reply_id = #{replyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+    update cb_follow_reply
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      follow_id = #{followId,jdbcType=INTEGER},
+      image_follow_id = #{imageFollowId,jdbcType=INTEGER},
+      reply_user_id = #{replyUserId,jdbcType=VARCHAR},
+      reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+      reply_date = #{replyDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      reply_text = #{replyText,jdbcType=LONGVARCHAR}
+    where reply_id = #{replyId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+    update cb_follow_reply
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      follow_id = #{followId,jdbcType=INTEGER},
+      image_follow_id = #{imageFollowId,jdbcType=INTEGER},
+      reply_user_id = #{replyUserId,jdbcType=VARCHAR},
+      reply_user_name = #{replyUserName,jdbcType=VARCHAR},
+      reply_date = #{replyDate,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=VARCHAR},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where reply_id = #{replyId,jdbcType=INTEGER}
+  </update>
+</mapper>

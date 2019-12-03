@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.MessageMapperExt">
+    <insert id="insertSelectiveExt" keyProperty="msgId" useGeneratedKeys="true" parameterType="com.yofc.dal.subject.entity.Message">
+        insert into cb_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="receiverUserId != null">
+                receiver_user_id,
+            </if>
+            <if test="src != null">
+                src,
+            </if>
+            <if test="fallbackSrc != null">
+                fallback_src,
+            </if>
+            <if test="title != null">
+                title,
+            </if>
+            <if test="msgBody != null">
+                msg_body,
+            </if>
+            <if test="url != null">
+                url,
+            </if>
+            <if test="msgType != null">
+                msg_type,
+            </if>
+            <if test="readable != null">
+                readable,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="receiverUserId != null">
+                #{receiverUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="src != null">
+                #{src,jdbcType=VARCHAR},
+            </if>
+            <if test="fallbackSrc != null">
+                #{fallbackSrc,jdbcType=VARCHAR},
+            </if>
+            <if test="title != null">
+                #{title,jdbcType=VARCHAR},
+            </if>
+            <if test="msgBody != null">
+                #{msgBody,jdbcType=VARCHAR},
+            </if>
+            <if test="url != null">
+                #{url,jdbcType=VARCHAR},
+            </if>
+            <if test="msgType != null">
+                #{msgType,jdbcType=VARCHAR},
+            </if>
+            <if test="readable != null">
+                #{readable,jdbcType=VARCHAR},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createTime != null">
+                #{createTime,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>

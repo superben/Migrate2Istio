@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectGoodPointMapperExt">
+  <resultMap id="BaseResultMap" type="com.yofc.dal.subject.entity.SubjectGoodPoint">
+    <id column="good_point_id" jdbcType="INTEGER" property="goodPointId" />
+    <result column="subject_id" jdbcType="INTEGER" property="subjectId" />
+    <result column="follow_id" jdbcType="INTEGER" property="followId" />
+    <result column="reply_id" jdbcType="INTEGER" property="replyId" />
+    <result column="good_point" jdbcType="INTEGER" property="goodPoint" />
+    <result column="point_type" jdbcType="VARCHAR" property="pointType" />
+    <result column="point_user_id" jdbcType="VARCHAR" property="pointUserId" />
+    <result column="point_user_name" jdbcType="VARCHAR" property="pointUserName" />
+    <result column="point_date" jdbcType="TIMESTAMP" property="pointDate" />
+  </resultMap>
+  <sql id="Example_Where_Clause">
+    <where>
+      <foreach collection="oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause">
+    <where>
+      <foreach collection="example.oredCriteria" item="criteria" separator="or">
+        <if test="criteria.valid">
+          <trim prefix="(" prefixOverrides="and" suffix=")">
+            <foreach collection="criteria.criteria" item="criterion">
+              <choose>
+                <when test="criterion.noValue">
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue">
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue">
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue">
+                  and ${criterion.condition}
+                  <foreach close=")" collection="criterion.value" item="listItem" open="(" separator=",">
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List">
+    good_point_id, subject_id, follow_id, reply_id, good_point, point_type, point_user_id, 
+    point_user_name, point_date
+  </sql>
+  <select id="selectByExample" parameterType="com.yofc.dal.subject.entity.SubjectGoodPointExample" resultMap="BaseResultMap">
+    select
+    <if test="distinct">
+      distinct
+    </if>
+    'true' as QUERYID,
+    <include refid="Base_Column_List" />
+    from cb_good_point
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null">
+      order by ${orderByClause}
+    </if>
+    <if test="limit != null">
+      <if test="offset != null">
+        limit ${offset}, ${limit}
+      </if>
+      <if test="offset == null">
+        limit ${limit}
+      </if>
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from cb_good_point
+    where good_point_id = #{goodPointId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from cb_good_point
+    where good_point_id = #{goodPointId,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yofc.dal.subject.entity.SubjectGoodPointExample">
+    delete from cb_good_point
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yofc.dal.subject.entity.SubjectGoodPoint">
+    insert into cb_good_point (good_point_id, subject_id, follow_id, 
+      reply_id, good_point, point_type, 
+      point_user_id, point_user_name, point_date
+      )
+    values (#{goodPointId,jdbcType=INTEGER}, #{subjectId,jdbcType=INTEGER}, #{followId,jdbcType=INTEGER}, 
+      #{replyId,jdbcType=INTEGER}, #{goodPoint,jdbcType=INTEGER}, #{pointType,jdbcType=VARCHAR}, 
+      #{pointUserId,jdbcType=VARCHAR}, #{pointUserName,jdbcType=VARCHAR}, #{pointDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.yofc.dal.subject.entity.SubjectGoodPoint">
+    insert into cb_good_point
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="goodPointId != null">
+        good_point_id,
+      </if>
+      <if test="subjectId != null">
+        subject_id,
+      </if>
+      <if test="followId != null">
+        follow_id,
+      </if>
+      <if test="replyId != null">
+        reply_id,
+      </if>
+      <if test="goodPoint != null">
+        good_point,
+      </if>
+      <if test="pointType != null">
+        point_type,
+      </if>
+      <if test="pointUserId != null">
+        point_user_id,
+      </if>
+      <if test="pointUserName != null">
+        point_user_name,
+      </if>
+      <if test="pointDate != null">
+        point_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="goodPointId != null">
+        #{goodPointId,jdbcType=INTEGER},
+      </if>
+      <if test="subjectId != null">
+        #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="followId != null">
+        #{followId,jdbcType=INTEGER},
+      </if>
+      <if test="replyId != null">
+        #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="goodPoint != null">
+        #{goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="pointType != null">
+        #{pointType,jdbcType=VARCHAR},
+      </if>
+      <if test="pointUserId != null">
+        #{pointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointUserName != null">
+        #{pointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="pointDate != null">
+        #{pointDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.yofc.dal.subject.entity.SubjectGoodPointExample" resultType="java.lang.Long">
+    select count(*) from cb_good_point
+    <if test="_parameter != null">
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map">
+    update cb_good_point
+    <set>
+      <if test="record.goodPointId != null">
+        good_point_id = #{record.goodPointId,jdbcType=INTEGER},
+      </if>
+      <if test="record.subjectId != null">
+        subject_id = #{record.subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="record.followId != null">
+        follow_id = #{record.followId,jdbcType=INTEGER},
+      </if>
+      <if test="record.replyId != null">
+        reply_id = #{record.replyId,jdbcType=INTEGER},
+      </if>
+      <if test="record.goodPoint != null">
+        good_point = #{record.goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="record.pointType != null">
+        point_type = #{record.pointType,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointUserId != null">
+        point_user_id = #{record.pointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointUserName != null">
+        point_user_name = #{record.pointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.pointDate != null">
+        point_date = #{record.pointDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map">
+    update cb_good_point
+    set good_point_id = #{record.goodPointId,jdbcType=INTEGER},
+      subject_id = #{record.subjectId,jdbcType=INTEGER},
+      follow_id = #{record.followId,jdbcType=INTEGER},
+      reply_id = #{record.replyId,jdbcType=INTEGER},
+      good_point = #{record.goodPoint,jdbcType=INTEGER},
+      point_type = #{record.pointType,jdbcType=VARCHAR},
+      point_user_id = #{record.pointUserId,jdbcType=VARCHAR},
+      point_user_name = #{record.pointUserName,jdbcType=VARCHAR},
+      point_date = #{record.pointDate,jdbcType=TIMESTAMP}
+    <if test="_parameter != null">
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yofc.dal.subject.entity.SubjectGoodPoint">
+    update cb_good_point
+    <set>
+      <if test="subjectId != null">
+        subject_id = #{subjectId,jdbcType=INTEGER},
+      </if>
+      <if test="followId != null">
+        follow_id = #{followId,jdbcType=INTEGER},
+      </if>
+      <if test="replyId != null">
+        reply_id = #{replyId,jdbcType=INTEGER},
+      </if>
+      <if test="goodPoint != null">
+        good_point = #{goodPoint,jdbcType=INTEGER},
+      </if>
+      <if test="pointType != null">
+        point_type = #{pointType,jdbcType=VARCHAR},
+      </if>
+      <if test="pointUserId != null">
+        point_user_id = #{pointUserId,jdbcType=VARCHAR},
+      </if>
+      <if test="pointUserName != null">
+        point_user_name = #{pointUserName,jdbcType=VARCHAR},
+      </if>
+      <if test="pointDate != null">
+        point_date = #{pointDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where good_point_id = #{goodPointId,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yofc.dal.subject.entity.SubjectGoodPoint">
+    update cb_good_point
+    set subject_id = #{subjectId,jdbcType=INTEGER},
+      follow_id = #{followId,jdbcType=INTEGER},
+      reply_id = #{replyId,jdbcType=INTEGER},
+      good_point = #{goodPoint,jdbcType=INTEGER},
+      point_type = #{pointType,jdbcType=VARCHAR},
+      point_user_id = #{pointUserId,jdbcType=VARCHAR},
+      point_user_name = #{pointUserName,jdbcType=VARCHAR},
+      point_date = #{pointDate,jdbcType=TIMESTAMP}
+    where good_point_id = #{goodPointId,jdbcType=INTEGER}
+  </update>
+</mapper>

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectClassifyMapperExt">
+    <select id="list" resultMap="BaseResultMap" parameterType="java.util.Map">
+        select
+        <include refid="Base_Column_List" />
+        from cb_subject_classify csc
+        <if test="userId != null and userId !='' and userId !='all'">
+            where
+            csc.show = 'Y' AND
+            exists (
+            select 1 from cb_classify_group_map ccgm,
+            (select concat(sd.ancestors, ',', sd.dept_id) as ancestors from sys_user su inner join sys_dept sd on su.dept_id = sd.dept_id and su.user_id = #{userId}) usd
+            where
+            ccgm.subject_classify_code = csc.subject_classify_code
+            and    locate(ccgm.ancestors, usd.ancestors) > 0
+            )
+        </if>
+        order by csc.seq
+    </select>
+
+</mapper>

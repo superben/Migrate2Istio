@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.vote.mapper.VoteRecordMapperExt">
+    <select id="countVoteSubject4Summary" parameterType="java.util.Map" resultType="java.util.Map">
+        SELECT
+            count(vr.vote_record_id) as voteCount, vsi.item as itemName, vsi.vote_item_id as voteItemId
+        FROM
+						vote_subject_item vsi left join
+            vote_record vr on vsi.vote_item_id = vr.vote_subject_item_id
+        WHERE
+            vsi.has_other = 'N'
+            <if test="voteSubjectId != null">
+               and vsi.vote_subject_id = #{voteSubjectId}
+            </if>
+            <if test="voteId != null">
+               and exists (
+                    select 1 from vote_subject vs where vs.vote_subject_id = vsi.vote_subject_id and vs.vote_ID = #{voteId}
+                )
+            </if>
+        GROUP BY
+            vsi.vote_item_id
+				ORDER BY vsi.vote_item_id
+    </select>
+
+    <select id="countSummary" parameterType="java.lang.Integer" resultType="java.util.Map">
+        SELECT
+            (SELECT count(1) FROM sys_user) needVoteCount,
+            (
+                SELECT
+                    count(DISTINCT(vote_user_id))
+                FROM
+                    vote_record
+                WHERE
+                    vote_id = #{voteId}
+            ) hadVoteCount
+        FROM
+            DUAL
+    </select>
+
+    <select id="queryVoteRecordByPerson" parameterType="java.lang.Integer" resultType="java.util.Map">
+        select max(vote_date) as voteDate, vote_user_name as  voteUserName from vote_record  where vote_id= #{voteId} group by vote_user_name
+    </select>
+
+    <insert id="insertSelectiveExt" keyProperty="voteRecordId" useGeneratedKeys="true" keyColumn="vote_record_id" parameterType="com.yofc.dal.vote.entity.VoteRecord">
+        insert into vote_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="voteId != null">
+                vote_id,
+            </if>
+            <if test="voteUserId != null">
+                vote_user_id,
+            </if>
+            <if test="voteDate != null">
+                vote_date,
+            </if>
+            <if test="voteSubjectId != null">
+                vote_subject_id,
+            </if>
+            <if test="voteSubjectItemId != null">
+                vote_subject_item_id,
+            </if>
+            <if test="voteUserName != null">
+                vote_user_name,
+            </if>
+            <if test="voteSubjectItemOther != null">
+                vote_subject_item_other,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="voteId != null">
+                #{voteId,jdbcType=INTEGER},
+            </if>
+            <if test="voteUserId != null">
+                #{voteUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="voteDate != null">
+                #{voteDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="voteSubjectId != null">
+                #{voteSubjectId,jdbcType=INTEGER},
+            </if>
+            <if test="voteSubjectItemId != null">
+                #{voteSubjectItemId,jdbcType=INTEGER},
+            </if>
+            <if test="voteUserName != null">
+                #{voteUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="voteSubjectItemOther != null">
+                #{voteSubjectItemOther,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+</mapper>

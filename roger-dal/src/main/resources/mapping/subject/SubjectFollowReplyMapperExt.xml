@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.yofc.dal.subject.mapper.SubjectFollowReplyMapperExt">
+    <select id="queryDetailId" parameterType="java.util.Map" resultType="java.util.Map">
+        select
+            cfr.reply_id replyId,
+            cfr.subject_id subjectId,
+            cfr.follow_id followId,
+            cfr.reply_text replyText,
+            cfr.reply_user_id replyUserId,
+            cfr.reply_user_name replyUserName,
+            cfr.reply_date replyDate,
+            cfr.image_follow_id imageFollowId,
+            cfr.create_user createUser,
+            cfr.create_date createDate,
+            cfr.update_user updateUser,
+            cfr.update_date updateDate,
+            wu.photo as avatar,
+        (select sum(cgp.good_point) from cb_good_point cgp where cgp.follow_id = cfr.image_follow_id and point_type='follow') as goodPointCount,
+        cgp1.good_point as goodPoint
+          from cb_follow_reply cfr left join cb_good_point cgp1
+          on (cfr.image_follow_id = cgp1.follow_id and cgp1.point_type = 'follow' and cgp1.point_user_id = #{userId})
+          left join sys_user wu on wu.user_id = cfr.reply_user_id
+        where 1 = 1
+            and cfr.follow_id = #{followId,jdbcType=INTEGER}
+        order by cfr.create_date desc
+    </select>
+
+    <insert id="insertSelectiveExt" keyProperty="replyId" useGeneratedKeys="true"  parameterType="com.yofc.dal.subject.entity.SubjectFollowReply">
+        insert into cb_follow_reply
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                subject_id,
+            </if>
+            <if test="followId != null">
+                follow_id,
+            </if>
+            <if test="replyText != null">
+                reply_text,
+            </if>
+            <if test="imageFollowId != null">
+                image_follow_id,
+            </if>
+            <if test="replyUserId != null">
+                reply_user_id,
+            </if>
+            <if test="replyUserName != null">
+                reply_user_name,
+            </if>
+            <if test="replyDate != null">
+                reply_date,
+            </if>
+            <if test="createUser != null">
+                create_user,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateUser != null">
+                update_user,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="subjectId != null">
+                #{subjectId,jdbcType=INTEGER},
+            </if>
+            <if test="followId != null">
+                #{followId,jdbcType=INTEGER},
+            </if>
+            <if test="replyText != null">
+                #{replyText,jdbcType=LONGVARCHAR},
+            </if>
+            <if test="imageFollowId != null">
+                #{imageFollowId,jdbcType=INTEGER},
+            </if>
+            <if test="replyUserId != null">
+                #{replyUserId,jdbcType=VARCHAR},
+            </if>
+            <if test="replyUserName != null">
+                #{replyUserName,jdbcType=VARCHAR},
+            </if>
+            <if test="replyDate != null">
+                #{replyDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createUser != null">
+                #{createUser,jdbcType=VARCHAR},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateUser != null">
+                #{updateUser,jdbcType=VARCHAR},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+</mapper>
